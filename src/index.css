@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --background: 220 26% 7%;
+  --foreground: 210 40% 98%;
+  --card: 220 26% 10%;
+  --card-foreground: 210 40% 98%;
+  --popover: 220 26% 12%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 174 100% 45%;
+  --primary-foreground: 220 26% 7%;
+  --secondary: 214 18% 17%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 215 20% 22%;
+  --muted-foreground: 215 20% 70%;
+  --accent: 38 100% 60%;
+  --accent-foreground: 220 26% 7%;
+  --destructive: 0 84% 55%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214 18% 18%;
+  --input: 214 18% 18%;
+  --ring: 174 100% 45%;
+  --radius: 16px;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  font-family: "Sora", system-ui, sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+::selection {
+  background: rgba(0, 224, 198, 0.25);
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2));
+}
+
+.bg-glow {
+  background: radial-gradient(circle at top right, rgba(0, 224, 198, 0.18), transparent 60%),
+    radial-gradient(circle at 20% 20%, rgba(255, 183, 77, 0.12), transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(91, 151, 255, 0.12), transparent 55%);
+}
+
+.glass {
+  background: rgba(12, 17, 27, 0.78);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(79, 111, 140, 0.3);
+  backdrop-filter: blur(24px);
+}
+
+.text-mono {
+  font-family: "IBM Plex Mono", "Fira Code", monospace;
+}

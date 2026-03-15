@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" fill="none">
+  <rect width="160" height="160" rx="32" fill="#0B1120"/>
+  <rect x="16" y="16" width="128" height="128" rx="24" fill="url(#glow)" fill-opacity="0.18"/>
+  <path d="M52 56h56v20c0 23.2-18.8 42-42 42H52V56z" fill="#22D3EE"/>
+  <path d="M108 56v20c0 23.2-18.8 42-42 42" stroke="#FBBF24" stroke-width="10" stroke-linecap="round"/>
+  <defs>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(120 32) rotate(135) scale(140)">
+      <stop stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
