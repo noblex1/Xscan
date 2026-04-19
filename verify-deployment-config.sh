@@ -1,7 +1,7 @@
 #!/bin/bash
 # Verify ML Service Deployment Configuration
 
-echo "🔍 NetWard AI - Deployment Configuration Checker"
+echo "🔍 Catchers AI - Deployment Configuration Checker"
 echo "================================================"
 echo ""
 
@@ -44,7 +44,7 @@ echo "2. Checking render.yaml Configuration..."
 if [ -f "render.yaml" ]; then
     echo -e "   ${GREEN}✓${NC} render.yaml exists"
     
-    if grep -q "netward-ai-ml" render.yaml; then
+    if grep -q "catchers-ai-ml" render.yaml; then
         echo -e "   ${GREEN}✓${NC} ML service configured in render.yaml"
     else
         echo -e "   ${RED}✗${NC} ML service NOT configured in render.yaml"

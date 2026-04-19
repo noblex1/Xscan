@@ -1,7 +1,7 @@
 {
-  "name": "netward-ai-backend",
+  "name": "catchers-ai-backend",
   "version": "1.0.0",
-  "description": "NetWard AI Backend API - Threat Detection Service",
+  "description": "Catchers AI Backend API - Threat Detection Service",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {

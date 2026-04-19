@@ -1,5 +1,5 @@
 """
-NetWard AI - ML Service
+Catchers AI - ML Service
 FastAPI-based machine learning service for threat detection
 """
 from fastapi import FastAPI, HTTPException
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="NetWard AI - ML Service",
+    title="Catchers AI - ML Service",
     description="Machine Learning API for Phishing and Threat Detection",
     version="1.0.0"
 )
@@ -104,7 +104,7 @@ class MLAnalysisResponse(BaseModel):
 async def root():
     """Root endpoint"""
     return {
-        "service": "NetWard AI - ML Service",
+        "service": "Catchers AI - ML Service",
         "version": "1.0.0",
         "status": "operational",
         "endpoints": {

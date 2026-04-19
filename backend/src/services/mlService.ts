@@ -76,7 +76,9 @@ class MLService {
 
     try {
       const response = await this.client.get('/health', { timeout: 5000 });
-      this.isAvailable = response.data.status === 'healthy' && response.data.model_loaded;
+      const data = response.data as { status?: string; model_loaded?: boolean } | undefined;
+      this.isAvailable =
+        data?.status === 'healthy' && data?.model_loaded === true;
       this.lastHealthCheck = now;
       
       if (this.isAvailable) {

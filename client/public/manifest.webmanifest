@@ -1,0 +1,17 @@
+{
+  "name": "Catchers AI — Threat scanner",
+  "short_name": "Catchers AI",
+  "description": "URL and content threat analysis",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#14b8a6",
+  "icons": [
+    {
+      "src": "/placeholder.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -24,7 +24,7 @@ export async function traceRedirects(url: string, maxHops = 6, timeout = 5000): 
     timeout,
     maxRedirects: 0,
     validateStatus: (s) => s >= 200 && s < 400,
-    headers: { 'User-Agent': 'NetWardAI-RedirectTracer/1.0' },
+    headers: { 'User-Agent': 'CatchersAI-RedirectTracer/1.0' },
   });
 
   try {

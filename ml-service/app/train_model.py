@@ -80,7 +80,7 @@ def create_synthetic_training_data(n_samples=10000):
 def train_model():
     """Train the phishing detection model"""
     print("=" * 60)
-    print("NetWard AI - ML Model Training")
+    print("Catchers AI - ML Model Training")
     print("=" * 60)
     
     # Create training data

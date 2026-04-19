@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import HeroSection, { type BackendStatus } from "@/components/HeroSection";
+import HeroSection, { type BackendStatus, type MlStatus } from "@/components/HeroSection";
 import AnalyzeForm, { type AnalyzeMode, type AnalyzePayload } from "@/components/AnalyzeForm";
 import ResultCard from "@/components/ResultCard";
 import HistorySection from "@/components/HistorySection";
@@ -24,6 +24,7 @@ const Index = () => {
   const [lastMode, setLastMode] = useState<AnalyzeMode>("url");
   const [sourceLabel, setSourceLabel] = useState("");
   const [backendStatus, setBackendStatus] = useState<BackendStatus>("checking");
+  const [mlStatus, setMlStatus] = useState<MlStatus>("checking");
 
   const historyQuery = useQuery({
     queryKey: ["scanHistory"],
@@ -39,6 +40,7 @@ const Index = () => {
 
   const refreshHealth = useCallback(async () => {
     setBackendStatus("checking");
+    setMlStatus("checking");
     try {
       const h = await fetchHealth();
       if (h.status === "ok" && h.database === "disconnected") {
@@ -48,8 +50,10 @@ const Index = () => {
       } else {
         setBackendStatus("degraded");
       }
+      setMlStatus(h.mlService === "connected" ? "ok" : "offline");
     } catch {
       setBackendStatus("offline");
+      setMlStatus("offline");
     }
   }, []);
 
@@ -124,7 +128,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <HeroSection backendStatus={backendStatus} />
+      <HeroSection backendStatus={backendStatus} mlStatus={mlStatus} />
       <div className="space-y-8 pb-16">
         <StatsBar
           stats={statsQuery.data}

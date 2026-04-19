@@ -99,7 +99,7 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
   const copyResult = () => {
     const target = result.url ?? result.fileName ?? sourceLabel;
     const text = [
-      `NetWard AI — ${resultLabel(result.riskCategory)}`,
+      `Catchers AI — ${resultLabel(result.riskCategory)}`,
       `Threat score: ${score}/100`,
       `Target: ${target}`,
       "",

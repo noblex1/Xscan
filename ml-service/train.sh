@@ -1,5 +1,5 @@
 #!/bin/bash
-# Train the ML model for NetWard AI
+# Train the ML model for Catchers AI
 
 echo "🚀 Starting ML Model Training..."
 echo ""

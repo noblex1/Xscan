@@ -120,7 +120,7 @@ class ThreatIntelligenceService {
         `/threatMatches:find?key=${config.googleSafeBrowsingApiKey}`,
         {
           client: {
-            clientId: 'netward-ai',
+            clientId: 'catchers-ai',
             clientVersion: '1.0.0',
           },
           threatInfo: {
@@ -163,7 +163,7 @@ class ThreatIntelligenceService {
         `http://checkurl.phishtank.com/checkurl/index.php?url=${encodedUrl}&format=json`,
         {
           headers: {
-            'User-Agent': 'NetWard-AI/1.0',
+            'User-Agent': 'Catchers-AI/1.0',
           },
           timeout: 10000,
         }

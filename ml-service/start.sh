@@ -1,7 +1,7 @@
 #!/bin/bash
-# Start the ML service for NetWard AI
+# Start the ML service for Catchers AI
 
-echo "🚀 Starting NetWard AI ML Service..."
+echo "🚀 Starting Catchers AI ML Service..."
 echo ""
 
 # Activate virtual environment

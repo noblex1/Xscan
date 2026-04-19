@@ -6,10 +6,12 @@ dotenv.config();
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  MONGODB_URI: z.string().default('mongodb://localhost:27017/netward-ai'),
+  MONGODB_URI: z.string().default('mongodb://localhost:27017/catchers-ai'),
   // Comma-separated list or a single origin. Example:
-  // CORS_ORIGIN=http://localhost:8080,https://net-ward-ai.vercel.app
-  CORS_ORIGIN: z.string().default('http://localhost:8080'),
+  // CORS_ORIGIN=http://localhost:8080,https://your-frontend.example.com
+  CORS_ORIGIN: z
+    .string()
+    .default('http://localhost:8080,http://127.0.0.1:8080,http://[::1]:8080'),
 
   // API keys (optional; individual services can decide behavior when missing)
   VIRUSTOTAL_API_KEY: z.string().optional(),

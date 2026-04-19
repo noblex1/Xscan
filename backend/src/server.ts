@@ -9,8 +9,26 @@ import { swaggerSpec } from './config/swagger.js';
 import threatRoutes from './routes/threatRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { apiRateLimiter } from './middleware/rateLimiter.js';
+import { mlService } from './services/mlService.js';
 
 const app = express();
+
+/** Allow typical Vite dev URLs (localhost / 127.0.0.1 / IPv6) on any port. */
+function isDevelopmentLocalOrigin(origin: string): boolean {
+  if (config.nodeEnv !== 'development') return false;
+  try {
+    const { protocol, hostname } = new URL(origin);
+    if (protocol !== 'http:' && protocol !== 'https:') return false;
+    return (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '[::1]' ||
+      hostname === '::1'
+    );
+  } catch {
+    return false;
+  }
+}
 
 // Security middleware
 app.use(helmet());
@@ -20,6 +38,7 @@ app.use(
       // Non-browser clients (curl, health checks, server-to-server) often send no Origin.
       if (!origin) return callback(null, true);
       if (config.corsOrigins.includes(origin)) return callback(null, true);
+      if (isDevelopmentLocalOrigin(origin)) return callback(null, true);
       return callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
@@ -36,7 +55,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // API Documentation (Swagger)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'NetWard AI API Documentation',
+  customSiteTitle: 'Catchers AI API Documentation',
 }));
 
 // Rate limiting
@@ -68,13 +87,24 @@ app.use('/api/v1', apiRateLimiter);
  *                 database:
  *                   type: string
  *                   enum: [connected, disconnected]
+ *                 mlService:
+ *                   type: string
+ *                   enum: [connected, disconnected]
+ *                   description: ML microservice reachable and model loaded
  */
-app.get('/health', (_req, res) => {
+app.get('/health', async (_req, res) => {
+  let mlConnected = false;
+  try {
+    mlConnected = await mlService.checkHealth();
+  } catch {
+    mlConnected = false;
+  }
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     database: isDatabaseReady() ? 'connected' : 'disconnected',
+    mlService: mlConnected ? 'connected' : 'disconnected',
   });
 });
 
@@ -126,7 +156,7 @@ app.use('/api/v1/threats', threatRoutes);
 // Root endpoint
 app.get('/', (_req, res) => {
   res.json({
-    name: 'NetWard AI Backend API',
+    name: 'Catchers AI Backend API',
     version: '1.0.0',
     description: 'Threat Detection API',
     endpoints: {

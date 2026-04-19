@@ -98,4 +98,6 @@ export interface HealthResponse {
   timestamp?: string;
   uptime?: number;
   database?: string;
+  /** Present when backend supports ML status (Catchers AI backend). */
+  mlService?: "connected" | "disconnected";
 }

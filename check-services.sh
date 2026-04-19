@@ -1,7 +1,7 @@
 #!/bin/bash
-# Check status of all NetWard AI services
+# Check status of all Catchers AI services
 
-echo "🔍 NetWard AI - Service Status Check"
+echo "🔍 Catchers AI - Service Status Check"
 echo "===================================="
 echo ""
 

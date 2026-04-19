@@ -5,11 +5,11 @@ const swaggerOptions: swaggerJsdoc.Options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'NetWard AI API',
+      title: 'Catchers AI API',
       version: '1.0.0',
       description: 'Threat Detection API - Real-time URL and file scanning using multiple threat intelligence sources',
       contact: {
-        name: 'NetWard AI',
+        name: 'Catchers AI',
       },
       license: {
         name: 'MIT',
@@ -21,8 +21,8 @@ const swaggerOptions: swaggerJsdoc.Options = {
         description: 'Development server',
       },
       {
-        url: 'https://netward-ai.onrender.com',
-        description: 'Production server',
+        url: 'https://your-backend.example.com',
+        description: 'Production server (replace with your deployed API URL)',
       },
     ],
     tags: [

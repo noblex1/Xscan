@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# NetWard AI - Start ML Service
+# Catchers AI - Start ML Service
 # Quick start script for the ML service
 
 set -e
 
-echo "Starting NetWard AI ML Service..."
+echo "Starting Catchers AI ML Service..."
 echo ""
 
 cd ml-service

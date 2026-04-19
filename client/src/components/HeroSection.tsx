@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Shield, Zap, Brain } from "lucide-react";
 
 export type BackendStatus = "checking" | "ok" | "degraded" | "offline";
+export type MlStatus = "checking" | "ok" | "offline";
 
 const features = [
   {
@@ -15,6 +16,7 @@ const features = [
 
 interface HeroSectionProps {
   backendStatus: BackendStatus;
+  mlStatus: MlStatus;
 }
 
 function statusLabel(s: BackendStatus): { text: string; pulse: boolean; warn: boolean } {
@@ -32,8 +34,25 @@ function statusLabel(s: BackendStatus): { text: string; pulse: boolean; warn: bo
   }
 }
 
-const HeroSection = ({ backendStatus }: HeroSectionProps) => {
+function mlStatusLabel(s: MlStatus, apiDown: boolean): { text: string; pulse: boolean; warn: boolean } {
+  if (apiDown) {
+    return { text: "ML: —", pulse: false, warn: true };
+  }
+  switch (s) {
+    case "checking":
+      return { text: "Checking ML…", pulse: true, warn: false };
+    case "ok":
+      return { text: "ML service ready", pulse: true, warn: false };
+    case "offline":
+      return { text: "ML offline (heuristics only)", pulse: false, warn: true };
+    default:
+      return { text: "ML: unknown", pulse: false, warn: true };
+  }
+}
+
+const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
   const st = statusLabel(backendStatus);
+  const ml = mlStatusLabel(mlStatus, backendStatus === "offline");
 
   return (
     <section className="relative py-16 md:py-24 overflow-hidden">
@@ -53,23 +72,39 @@ const HeroSection = ({ backendStatus }: HeroSectionProps) => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto"
         >
-          <div
-            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 ${
-              st.warn
-                ? "border-warning/40 bg-warning/10"
-                : "border-primary/30 bg-primary/5"
-            }`}
-          >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-6">
             <div
-              className={`w-2 h-2 rounded-full ${
-                st.warn ? "bg-warning" : "bg-primary"
-              } ${st.pulse ? "animate-pulse-glow" : ""}`}
-            />
-            <span className="text-sm font-mono text-foreground/90">{st.text}</span>
+              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${
+                st.warn
+                  ? "border-warning/40 bg-warning/10"
+                  : "border-primary/30 bg-primary/5"
+              }`}
+            >
+              <div
+                className={`w-2 h-2 rounded-full ${
+                  st.warn ? "bg-warning" : "bg-primary"
+                } ${st.pulse ? "animate-pulse-glow" : ""}`}
+              />
+              <span className="text-sm font-mono text-foreground/90">{st.text}</span>
+            </div>
+            <div
+              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${
+                ml.warn
+                  ? "border-warning/40 bg-warning/10"
+                  : "border-primary/30 bg-primary/5"
+              }`}
+            >
+              <div
+                className={`w-2 h-2 rounded-full ${
+                  ml.warn ? "bg-warning" : "bg-primary"
+                } ${ml.pulse ? "animate-pulse-glow" : ""}`}
+              />
+              <span className="text-sm font-mono text-foreground/90">{ml.text}</span>
+            </div>
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-heading tracking-tight mb-6">
-            <span className="text-foreground">NetWard AI</span>
+            <span className="text-foreground">Catchers AI</span>
             <br />
             <span className="text-gradient-primary">Threat scanner</span>
           </h1>

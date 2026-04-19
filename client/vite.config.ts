@@ -12,9 +12,42 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
     proxy: {
-      "/api": { target: "http://localhost:3000", changeOrigin: true },
-      "/health": { target: "http://localhost:3000", changeOrigin: true },
-      "/ready": { target: "http://localhost:3000", changeOrigin: true },
+      "/api": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+        configure(proxy) {
+          proxy.on("error", (err) => {
+            console.warn(
+              "[vite proxy] /api → backend failed (is the API running on http://localhost:3000 ?):",
+              err.message
+            );
+          });
+        },
+      },
+      "/health": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+        configure(proxy) {
+          proxy.on("error", (err) => {
+            console.warn(
+              "[vite proxy] /health → backend failed (is the API running on http://localhost:3000 ?):",
+              err.message
+            );
+          });
+        },
+      },
+      "/ready": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+        configure(proxy) {
+          proxy.on("error", (err) => {
+            console.warn(
+              "[vite proxy] /ready → backend failed (is the API running on http://localhost:3000 ?):",
+              err.message
+            );
+          });
+        },
+      },
     },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),

@@ -1,7 +1,7 @@
 services:
   # Backend API Service
   - type: web
-    name: netward-ai-backend
+    name: catchers-ai-backend
     env: node
     rootDir: backend
     buildCommand: npm install && npm run build
@@ -17,11 +17,11 @@ services:
       # - MONGODB_URI
       # - VIRUSTOTAL_API_KEY
       # - GOOGLE_SAFEBROWSING_API_KEY
-      # - CORS_ORIGIN=https://net-ward-ai.vercel.app
+      # - CORS_ORIGIN=https://your-frontend-host.example.com
 
   # ML Service (Python)
   - type: web
-    name: netward-ai-ml
+    name: catchers-ai-ml
     env: python
     rootDir: ml-service
     buildCommand: pip install -r requirements.txt && python -m app.train_model

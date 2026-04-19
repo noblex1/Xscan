@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# NetWard AI - ML Service Setup Script
+# Catchers AI - ML Service Setup Script
 # This script sets up and starts the ML service
 
 set -e
 
 echo "================================================"
-echo "NetWard AI - ML Service Setup"
+echo "Catchers AI - ML Service Setup"
 echo "================================================"
 echo ""
 

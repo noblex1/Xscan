@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# NetWard AI - Test ML Integration
+# Catchers AI - Test ML Integration
 # Quick test script to verify ML service is working
 
 set -e
 
 echo "================================================"
-echo "NetWard AI - ML Integration Test"
+echo "Catchers AI - ML Integration Test"
 echo "================================================"
 echo ""
 
