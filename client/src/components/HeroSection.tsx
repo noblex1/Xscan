@@ -55,7 +55,7 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
   const ml = mlStatusLabel(mlStatus, backendStatus === "offline");
 
   return (
-    <section className="relative py-16 md:py-24 overflow-hidden">
+    <section className="relative py-12 md:py-24 overflow-hidden">
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
@@ -72,9 +72,9 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto"
         >
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-6">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 mb-6">
             <div
-              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${
+              className={`inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full border w-full sm:w-auto ${
                 st.warn
                   ? "border-warning/40 bg-warning/10"
                   : "border-primary/30 bg-primary/5"
@@ -88,7 +88,7 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
               <span className="text-sm font-mono text-foreground/90">{st.text}</span>
             </div>
             <div
-              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border ${
+              className={`inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full border w-full sm:w-auto ${
                 ml.warn
                   ? "border-warning/40 bg-warning/10"
                   : "border-primary/30 bg-primary/5"
@@ -103,13 +103,13 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-heading tracking-tight mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold font-heading tracking-tight mb-4 md:mb-6">
             <span className="text-foreground">Catchers AI</span>
             <br />
             <span className="text-gradient-primary">Threat scanner</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto mb-12">
+          <p className="text-base md:text-xl text-muted-foreground max-w-xl mx-auto mb-8 md:mb-12 px-1">
             Analyze URLs and file or email content through the same pipeline your backend uses:
             threat intelligence, WHOIS/redirect features, and the ML microservice — exposed here via
             the REST API.
@@ -120,7 +120,7 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 max-w-3xl mx-auto"
         >
           {features.map((f, i) => (
             <div

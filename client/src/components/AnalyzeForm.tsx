@@ -57,22 +57,22 @@ const AnalyzeForm = ({ onSubmit, isLoading }: AnalyzeFormProps) => {
       transition={{ duration: 0.5, delay: 0.4 }}
       className="container max-w-2xl"
     >
-      <div className="rounded-xl border border-border bg-card p-6 md:p-8 glow-primary">
+      <div className="rounded-xl border border-border bg-card p-4 sm:p-6 md:p-8 glow-primary">
         <Tabs
           value={tab}
           onValueChange={(v) => setTab(v as AnalyzeMode)}
           className="mb-4"
         >
-          <TabsList className="bg-muted border border-border">
+          <TabsList className="bg-muted border border-border w-full grid grid-cols-2 h-auto">
             <TabsTrigger
               value="url"
-              className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               <Link className="w-4 h-4" /> URL
             </TabsTrigger>
             <TabsTrigger
               value="file"
-              className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               <FileText className="w-4 h-4" /> File / email body
             </TabsTrigger>
@@ -120,7 +120,7 @@ const AnalyzeForm = ({ onSubmit, isLoading }: AnalyzeFormProps) => {
         <Button
           onClick={handleSubmit}
           disabled={!canSubmit || isLoading}
-          className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90 font-heading font-semibold text-base h-12"
+          className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90 font-heading font-semibold text-sm sm:text-base h-11 sm:h-12"
         >
           {isLoading ? (
             <>

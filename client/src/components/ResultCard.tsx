@@ -4,10 +4,12 @@ import {
   ShieldAlert,
   ShieldX,
   Copy,
+  Download,
   Cpu,
   Microscope,
   ListChecks,
 } from "lucide-react";
+import { jsPDF } from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -111,6 +113,108 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
     toast.success("Summary copied to clipboard");
   };
 
+  const downloadPdfReport = () => {
+    try {
+      const target = result.url ?? result.fileName ?? sourceLabel;
+      const doc = new jsPDF({ unit: "pt", format: "a4" });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 48;
+      const contentWidth = pageWidth - margin * 2;
+      const lineHeight = 16;
+      const sectionGap = 12;
+      let y = margin;
+
+      const ensureSpace = (needed = lineHeight) => {
+        if (y + needed > pageHeight - margin) {
+          doc.addPage();
+          y = margin;
+        }
+      };
+
+      const addWrapped = (text: string, indent = 0) => {
+        const x = margin + indent;
+        const lines = doc.splitTextToSize(text, contentWidth - indent) as string[];
+        for (const line of lines) {
+          ensureSpace();
+          doc.text(line, x, y);
+          y += lineHeight;
+        }
+      };
+
+      const addSection = (title: string, lines: string[]) => {
+        if (lines.length === 0) return;
+        ensureSpace(lineHeight * 2);
+        y += 4;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        doc.text(title, margin, y);
+        y += lineHeight;
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        for (const line of lines) {
+          addWrapped(line, 10);
+        }
+        y += sectionGap;
+      };
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(20);
+      doc.text("Catchers AI Threat Analysis Report", margin, y);
+      y += lineHeight + 8;
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      addWrapped(`Generated: ${new Date().toLocaleString()}`);
+      addWrapped(`Target: ${target}`);
+      addWrapped(`Mode: ${mode === "url" ? "URL" : "File"}`);
+      addWrapped(`Risk category: ${resultLabel(result.riskCategory)}`);
+      addWrapped(`Threat score: ${score}/100`);
+      addWrapped(`Processing time: ${result.processingTime}`);
+      if (result.virusTotalScanId) addWrapped(`VirusTotal scan ID: ${result.virusTotalScanId}`);
+      y += sectionGap;
+
+      addSection("Recommendation", [result.recommendation]);
+      addSection("AI Analysis", [result.aiAnalysis]);
+      addSection("Risk Factors", result.riskFactors ?? []);
+      addSection("Positive Signals", result.securityFeatures ?? []);
+
+      addSection(
+        "Detection Methods",
+        (result.detectionMethods ?? []).map((m) => {
+          const source = m.source ? ` [${m.source}]` : "";
+          const details = m.details ? ` - ${m.details}` : "";
+          return `${m.name}: ${m.result}${source}${details}`;
+        })
+      );
+
+      const technicalLines = [
+        td.sslStatus ? `SSL/TLS: ${td.sslStatus}` : null,
+        td.domainAge ? `Domain age: ${td.domainAge}` : null,
+        td.redirects ? `Redirects: ${td.redirects}` : null,
+        td.reputation ? `Reputation: ${td.reputation}` : null,
+        td.suspiciousScripts ? `Scripts: ${td.suspiciousScripts}` : null,
+        td.hiddenIframes ? `Iframes: ${td.hiddenIframes}` : null,
+        td.formSecurity ? `Forms: ${td.formSecurity}` : null,
+      ].filter((x): x is string => Boolean(x));
+      addSection("Technical Details", technicalLines);
+
+      addSection(
+        "ML Feature Importance",
+        (result.explainability?.featureContributions ?? []).map(
+          (f) => `${f.feature}: ${f.importance.toFixed(3)}`
+        )
+      );
+
+      const safeName = target.replace(/[^\w.-]+/g, "_").slice(0, 64) || "threat-analysis";
+      doc.save(`catchers-ai-report-${safeName}.pdf`);
+      toast.success("PDF report downloaded");
+    } catch (error) {
+      console.error("Failed to export PDF report:", error);
+      toast.error("Failed to generate PDF report");
+    }
+  };
+
   const methodBadge = (r: string) => {
     if (r === "PASS") return "bg-safe/15 text-safe border-safe/30";
     if (r === "FAIL") return "bg-destructive/15 text-destructive border-destructive/30";
@@ -126,8 +230,8 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
       transition={{ duration: 0.4 }}
       className="container max-w-2xl"
     >
-      <div className={`rounded-xl border p-6 md:p-8 ${c.bg} ${c.glow}`}>
-        <div className="flex items-start justify-between gap-3 mb-4">
+      <div className={`rounded-xl border p-4 sm:p-6 md:p-8 ${c.bg} ${c.glow}`}>
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3 min-w-0">
             <Icon className={`w-8 h-8 shrink-0 ${c.color}`} />
             <div className="min-w-0">
@@ -142,15 +246,27 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
               </p>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={copyResult}
-            className="text-muted-foreground hover:text-foreground shrink-0"
-            type="button"
-          >
-            <Copy className="w-4 h-4" />
-          </Button>
+          <div className="flex w-full sm:w-auto items-center gap-2 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={downloadPdfReport}
+              className="text-xs font-mono flex-1 sm:flex-none"
+              type="button"
+            >
+              <Download className="w-4 h-4 mr-1" />
+              PDF report
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={copyResult}
+              className="text-muted-foreground hover:text-foreground"
+              type="button"
+            >
+              <Copy className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
 
         <div className="flex items-baseline justify-between gap-2 mb-2">
@@ -328,7 +444,7 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
             )}
         </Accordion>
 
-        <div className="mt-4 pt-4 border-t border-border/50 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground font-mono">
+        <div className="mt-4 pt-4 border-t border-border/50 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] sm:text-xs text-muted-foreground font-mono">
           <span>
             Mode: {mode === "url" ? "URL" : "File"}
           </span>

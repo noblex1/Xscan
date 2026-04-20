@@ -1,6 +1,6 @@
 {
   "model_version": "1.0.0",
-  "training_date": "2026-02-02T16:52:02.537537",
+  "training_date": "2026-04-19T11:30:55.590848",
   "n_samples": 10000,
   "n_features": 19,
   "accuracy": 1.0,

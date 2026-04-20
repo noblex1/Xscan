@@ -5,6 +5,7 @@ import AnalyzeForm, { type AnalyzeMode, type AnalyzePayload } from "@/components
 import ResultCard from "@/components/ResultCard";
 import HistorySection from "@/components/HistorySection";
 import StatsBar from "@/components/StatsBar";
+import HowItWorksSection from "@/components/HowItWorksSection";
 import {
   analyzeFile,
   analyzeUrl,
@@ -62,6 +63,28 @@ const Index = () => {
     const t = window.setInterval(() => void refreshHealth(), 60_000);
     return () => window.clearInterval(t);
   }, [refreshHealth]);
+
+  useEffect(() => {
+    const hasSeenToast = window.sessionStorage.getItem("scan-shortcut-toast");
+    if (hasSeenToast) return;
+
+    const timer = window.setTimeout(() => {
+      toast("Want to jump straight to scanning?", {
+        description: "Use this shortcut to move directly to the analyzer form.",
+        action: {
+          label: "Skip to scan",
+          onClick: () => {
+            document
+              .getElementById("scan-form")
+              ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          },
+        },
+      });
+      window.sessionStorage.setItem("scan-shortcut-toast", "1");
+    }, 900);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const handleAnalyze = async (payload: AnalyzePayload) => {
     setIsLoading(true);
@@ -135,7 +158,10 @@ const Index = () => {
           isLoading={statsQuery.isLoading}
           error={statsError}
         />
-        <AnalyzeForm onSubmit={handleAnalyze} isLoading={isLoading} />
+        <HowItWorksSection />
+        <div id="scan-form">
+          <AnalyzeForm onSubmit={handleAnalyze} isLoading={isLoading} />
+        </div>
         {result && (
           <ResultCard result={result} mode={lastMode} sourceLabel={sourceLabel} />
         )}

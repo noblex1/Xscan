@@ -43,13 +43,13 @@ const StatsBar = ({ stats, isLoading, error }: Props) => {
       transition={{ duration: 0.35 }}
       className="container max-w-2xl"
     >
-      <div className="rounded-xl border border-border bg-card/80 p-4 md:p-5">
-        <div className="flex items-center gap-2 mb-3">
+      <div className="rounded-xl border border-border bg-card/80 p-3 sm:p-4 md:p-5">
+        <div className="flex flex-wrap items-center gap-2 mb-3">
           <BarChart3 className="w-4 h-4 text-primary" />
           <h2 className="text-sm font-heading font-semibold text-foreground">
             Threat statistics
           </h2>
-          <span className="text-[10px] font-mono text-muted-foreground ml-auto">
+          <span className="text-[10px] font-mono text-muted-foreground sm:ml-auto break-all">
             GET /api/v1/threats/statistics
           </span>
         </div>
