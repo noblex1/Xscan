@@ -49,9 +49,6 @@ const StatsBar = ({ stats, isLoading, error }: Props) => {
           <h2 className="text-sm font-heading font-semibold text-foreground">
             Threat statistics
           </h2>
-          <span className="text-[10px] font-mono text-muted-foreground sm:ml-auto break-all">
-            GET /api/v1/threats/statistics
-          </span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-4">
           <div className="rounded-lg bg-muted/40 p-2">

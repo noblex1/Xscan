@@ -45,9 +45,6 @@ const HistorySection = ({
           <h2 className="text-lg font-heading font-semibold text-foreground">
             Scan history
           </h2>
-          <span className="text-[10px] sm:text-xs font-mono text-muted-foreground break-all">
-            GET /api/v1/threats/history
-          </span>
         </div>
         {onRefresh && (
           <Button

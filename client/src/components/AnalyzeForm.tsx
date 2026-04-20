@@ -80,8 +80,7 @@ const AnalyzeForm = ({ onSubmit, isLoading }: AnalyzeFormProps) => {
 
           <TabsContent value="url" className="mt-4 space-y-2">
             <p className="text-xs text-muted-foreground font-mono">
-              Sends <span className="text-foreground/80">POST /api/v1/threats/analyze-url</span> — VirusTotal,
-              Safe Browsing, PhishTank, ML, SSL, and heuristics.
+              Uses VirusTotal, Safe Browsing, PhishTank, ML, SSL, and heuristics.
             </p>
             <Textarea
               placeholder="Paste a URL (or text containing an https:// link)…"
@@ -93,8 +92,7 @@ const AnalyzeForm = ({ onSubmit, isLoading }: AnalyzeFormProps) => {
 
           <TabsContent value="file" className="mt-4 space-y-4">
             <p className="text-xs text-muted-foreground font-mono">
-              Sends <span className="text-foreground/80">POST /api/v1/threats/analyze-file</span> — ML content
-              model plus HTML/script/form heuristics.
+              Uses ML content analysis plus HTML/script/form heuristics.
             </p>
             <div className="space-y-2">
               <Label htmlFor="file-name" className="text-xs font-mono text-muted-foreground">
