@@ -246,6 +246,28 @@ export class ThreatController {
       });
     }
   }
+
+  /**
+   * Clear all scan history
+   */
+  async clearScanHistory(_req: Request, res: Response): Promise<void> {
+    try {
+      const deleted = await ScanHistory.deleteMany({});
+
+      res.json({
+        success: true,
+        data: {
+          deletedCount: deleted.deletedCount ?? 0,
+        },
+      });
+    } catch (error: any) {
+      console.error('Error clearing scan history:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+      });
+    }
+  }
 }
 
 export const threatController = new ThreatController();

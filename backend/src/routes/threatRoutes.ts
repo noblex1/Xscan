@@ -148,6 +148,28 @@ router.get('/history', (req, res) => threatController.getScanHistory(req, res));
 
 /**
  * @swagger
+ * /api/v1/threats/history:
+ *   delete:
+ *     summary: Clear all scan history
+ *     tags: [Threats]
+ *     responses:
+ *       200:
+ *         description: Scan history cleared successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
+ *             example:
+ *               success: true
+ *               data:
+ *                 deletedCount: 42
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/history', (req, res) => threatController.clearScanHistory(req, res));
+
+/**
+ * @swagger
  * /api/v1/threats/statistics:
  *   get:
  *     summary: Get threat detection statistics

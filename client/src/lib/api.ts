@@ -124,3 +124,9 @@ export async function fetchScanHistory(params?: {
 export async function fetchStatistics(): Promise<StatisticsResponse> {
   return requestJson<StatisticsResponse>("/api/v1/threats/statistics");
 }
+
+export async function clearScanHistory(): Promise<{ deletedCount: number }> {
+  return requestJson<{ deletedCount: number }>("/api/v1/threats/history", {
+    method: "DELETE",
+  });
+}

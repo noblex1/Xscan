@@ -10,6 +10,7 @@ import {
   analyzeFile,
   analyzeUrl,
   ApiRequestError,
+  clearScanHistory,
   fetchHealth,
   fetchScanHistory,
   fetchStatistics,
@@ -26,6 +27,7 @@ const Index = () => {
   const [sourceLabel, setSourceLabel] = useState("");
   const [backendStatus, setBackendStatus] = useState<BackendStatus>("checking");
   const [mlStatus, setMlStatus] = useState<MlStatus>("checking");
+  const [isClearingHistory, setIsClearingHistory] = useState(false);
 
   const historyQuery = useQuery({
     queryKey: ["scanHistory"],
@@ -135,6 +137,29 @@ const Index = () => {
     }
   };
 
+  const handleClearHistory = async () => {
+    const ok = window.confirm("Clear all scan history? This cannot be undone.");
+    if (!ok) return;
+
+    setIsClearingHistory(true);
+    try {
+      const data = await clearScanHistory();
+      await queryClient.invalidateQueries({ queryKey: ["scanHistory"] });
+      await queryClient.invalidateQueries({ queryKey: ["threatStatistics"] });
+      toast.success(`Scan history cleared (${data.deletedCount} deleted)`);
+    } catch (e) {
+      const msg =
+        e instanceof ApiRequestError
+          ? e.message
+          : e instanceof Error
+            ? e.message
+            : "Failed to clear history";
+      toast.error(msg);
+    } finally {
+      setIsClearingHistory(false);
+    }
+  };
+
   const historyError =
     historyQuery.isError
       ? historyQuery.error instanceof Error
@@ -168,7 +193,9 @@ const Index = () => {
         <HistorySection
           scans={historyQuery.data?.scans ?? []}
           isLoading={historyQuery.isFetching}
+          isClearing={isClearingHistory}
           onRefresh={() => void historyQuery.refetch()}
+          onClear={() => void handleClearHistory()}
           errorMessage={historyError}
         />
       </div>

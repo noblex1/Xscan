@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, ShieldCheck, ShieldAlert, ShieldX, RefreshCw } from "lucide-react";
+import { Clock, ShieldCheck, ShieldAlert, ShieldX, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { RiskCategory, ScanHistoryDocument } from "@/types/threat";
 
@@ -16,7 +16,9 @@ const riskVisual: Record<
 interface Props {
   scans: ScanHistoryDocument[];
   isLoading?: boolean;
+  isClearing?: boolean;
   onRefresh?: () => void;
+  onClear?: () => void;
   errorMessage?: string | null;
 }
 
@@ -29,7 +31,9 @@ function scanTitle(s: ScanHistoryDocument): string {
 const HistorySection = ({
   scans,
   isLoading,
+  isClearing,
   onRefresh,
+  onClear,
   errorMessage,
 }: Props) => {
   return (
@@ -46,19 +50,34 @@ const HistorySection = ({
             Scan history
           </h2>
         </div>
-        {onRefresh && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onRefresh}
-            disabled={isLoading}
-            className="text-muted-foreground gap-1 text-xs"
-            type="button"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
-            Refresh
-          </Button>
-        )}
+        <div className="flex items-center gap-1">
+          {onRefresh && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onRefresh}
+              disabled={isLoading || isClearing}
+              className="text-muted-foreground gap-1 text-xs"
+              type="button"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
+              Refresh
+            </Button>
+          )}
+          {onClear && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClear}
+              disabled={isLoading || isClearing || scans.length === 0}
+              className="text-destructive gap-1 text-xs hover:text-destructive"
+              type="button"
+            >
+              <Trash2 className={`w-3.5 h-3.5 ${isClearing ? "animate-pulse" : ""}`} />
+              {isClearing ? "Clearing..." : "Clear"}
+            </Button>
+          )}
+        </div>
       </div>
 
       {errorMessage && (
