@@ -241,7 +241,10 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
                   {resultLabel(result.riskCategory)}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground font-mono truncate" title={sourceLabel}>
+              <p
+                className="text-xs sm:text-sm text-muted-foreground font-mono break-all sm:break-normal sm:truncate"
+                title={sourceLabel}
+              >
                 {sourceLabel}
               </p>
             </div>
@@ -251,17 +254,17 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
               variant="outline"
               size="sm"
               onClick={downloadPdfReport}
-              className="text-xs font-mono flex-1 sm:flex-none"
+              className="text-[11px] sm:text-xs font-mono flex-1 sm:flex-none min-w-0"
               type="button"
             >
               <Download className="w-4 h-4 mr-1" />
-              PDF report
+              <span className="truncate">PDF report</span>
             </Button>
             <Button
               variant="ghost"
               size="icon"
               onClick={copyResult}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground shrink-0"
               type="button"
             >
               <Copy className="w-4 h-4" />
@@ -293,10 +296,10 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
         <Accordion type="multiple" className="w-full border-t border-border/50 pt-2">
           {(result.riskFactors?.length ?? 0) > 0 && (
             <AccordionItem value="risks" className="border-border/50">
-              <AccordionTrigger className="text-sm font-heading hover:no-underline py-3">
-                <span className="flex items-center gap-2">
+              <AccordionTrigger className="text-sm font-heading hover:no-underline py-3 text-left">
+                <span className="flex items-start gap-2 min-w-0">
                   <ShieldAlert className="w-4 h-4 text-destructive" />
-                  Risk factors ({result.riskFactors.length})
+                  <span className="break-words">Risk factors ({result.riskFactors.length})</span>
                 </span>
               </AccordionTrigger>
               <AccordionContent>
@@ -311,10 +314,10 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
 
           {(result.securityFeatures?.length ?? 0) > 0 && (
             <AccordionItem value="positive" className="border-border/50">
-              <AccordionTrigger className="text-sm font-heading hover:no-underline py-3">
-                <span className="flex items-center gap-2">
+              <AccordionTrigger className="text-sm font-heading hover:no-underline py-3 text-left">
+                <span className="flex items-start gap-2 min-w-0">
                   <ShieldCheck className="w-4 h-4 text-safe" />
-                  Positive signals ({result.securityFeatures.length})
+                  <span className="break-words">Positive signals ({result.securityFeatures.length})</span>
                 </span>
               </AccordionTrigger>
               <AccordionContent>
@@ -329,10 +332,10 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
 
           {(result.detectionMethods?.length ?? 0) > 0 && (
             <AccordionItem value="methods" className="border-border/50">
-              <AccordionTrigger className="text-sm font-heading hover:no-underline py-3">
-                <span className="flex items-center gap-2">
+              <AccordionTrigger className="text-sm font-heading hover:no-underline py-3 text-left">
+                <span className="flex items-start gap-2 min-w-0">
                   <ListChecks className="w-4 h-4 text-primary" />
-                  Detection methods
+                  <span className="break-words">Detection methods</span>
                 </span>
               </AccordionTrigger>
               <AccordionContent className="space-y-2">
@@ -361,10 +364,10 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
 
           {Object.keys(td).length > 0 && (
             <AccordionItem value="technical" className="border-border/50">
-              <AccordionTrigger className="text-sm font-heading hover:no-underline py-3">
-                <span className="flex items-center gap-2">
+              <AccordionTrigger className="text-sm font-heading hover:no-underline py-3 text-left">
+                <span className="flex items-start gap-2 min-w-0">
                   <Microscope className="w-4 h-4 text-accent" />
-                  Technical details
+                  <span className="break-words">Technical details</span>
                 </span>
               </AccordionTrigger>
               <AccordionContent>
@@ -419,10 +422,10 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
           {result.explainability?.featureContributions &&
             result.explainability.featureContributions.length > 0 && (
               <AccordionItem value="ml" className="border-border/50">
-                <AccordionTrigger className="text-sm font-heading hover:no-underline py-3">
-                  <span className="flex items-center gap-2">
+                <AccordionTrigger className="text-sm font-heading hover:no-underline py-3 text-left">
+                  <span className="flex items-start gap-2 min-w-0">
                     <Cpu className="w-4 h-4 text-primary" />
-                    ML feature importance (top signals)
+                    <span className="break-words">ML feature importance (top signals)</span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -448,12 +451,12 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
           <span>
             Mode: {mode === "url" ? "URL" : "File"}
           </span>
-          <span>•</span>
+          <span className="hidden sm:inline">•</span>
           <span>Processed in {result.processingTime}</span>
           {result.virusTotalScanId && (
             <>
-              <span>•</span>
-              <span>VT scan: {result.virusTotalScanId}</span>
+              <span className="hidden sm:inline">•</span>
+              <span className="break-all">VT scan: {result.virusTotalScanId}</span>
             </>
           )}
         </div>

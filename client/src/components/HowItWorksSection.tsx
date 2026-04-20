@@ -30,25 +30,25 @@ const HowItWorksSection = () => {
       transition={{ duration: 0.4 }}
       className="container max-w-4xl"
     >
-      <div className="rounded-xl border border-border bg-card p-6 md:p-8">
-        <h2 className="text-xl md:text-2xl font-heading font-bold text-foreground mb-2">
+      <div className="rounded-xl border border-border bg-card p-4 sm:p-6 md:p-8">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-heading font-bold text-foreground mb-2">
           How it works
         </h2>
-        <p className="text-sm text-muted-foreground mb-6">
+        <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">
           Three quick steps from input to explainable threat results.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           {steps.map((step) => (
             <div
               key={step.title}
-              className="rounded-lg border border-border/70 bg-muted/30 p-4"
+              className="rounded-lg border border-border/70 bg-muted/30 p-3 sm:p-4 min-w-0"
             >
               <step.icon className="w-5 h-5 text-primary mb-3" />
-              <h3 className="font-heading font-semibold text-sm text-foreground mb-1.5">
+              <h3 className="font-heading font-semibold text-xs sm:text-sm text-foreground mb-1.5 break-words">
                 {step.title}
               </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed break-words">
                 {step.description}
               </p>
             </div>

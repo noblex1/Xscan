@@ -74,7 +74,7 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
         >
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 mb-6">
             <div
-              className={`inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full border w-full sm:w-auto ${
+              className={`inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-full border w-full sm:w-auto min-w-0 ${
                 st.warn
                   ? "border-warning/40 bg-warning/10"
                   : "border-primary/30 bg-primary/5"
@@ -85,10 +85,10 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
                   st.warn ? "bg-warning" : "bg-primary"
                 } ${st.pulse ? "animate-pulse-glow" : ""}`}
               />
-              <span className="text-sm font-mono text-foreground/90">{st.text}</span>
+              <span className="text-xs sm:text-sm font-mono text-foreground/90 break-words">{st.text}</span>
             </div>
             <div
-              className={`inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full border w-full sm:w-auto ${
+              className={`inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-full border w-full sm:w-auto min-w-0 ${
                 ml.warn
                   ? "border-warning/40 bg-warning/10"
                   : "border-primary/30 bg-primary/5"
@@ -99,7 +99,7 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
                   ml.warn ? "bg-warning" : "bg-primary"
                 } ${ml.pulse ? "animate-pulse-glow" : ""}`}
               />
-              <span className="text-sm font-mono text-foreground/90">{ml.text}</span>
+              <span className="text-xs sm:text-sm font-mono text-foreground/90 break-words">{ml.text}</span>
             </div>
           </div>
 
@@ -125,11 +125,13 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
           {features.map((f, i) => (
             <div
               key={i}
-              className="flex flex-col items-center gap-2 p-5 rounded-lg bg-card border border-border hover:border-primary/40 transition-colors text-center"
+              className="flex flex-col items-center gap-2 p-4 sm:p-5 rounded-lg bg-card border border-border hover:border-primary/40 transition-colors text-center min-w-0"
             >
               <f.icon className="w-6 h-6 text-primary" />
-              <span className="font-heading font-semibold text-foreground text-sm">{f.label}</span>
-              <span className="text-xs text-muted-foreground leading-snug">{f.desc}</span>
+              <span className="font-heading font-semibold text-foreground text-sm break-words">{f.label}</span>
+              <span className="text-[11px] sm:text-xs text-muted-foreground leading-snug break-words">
+                {f.desc}
+              </span>
             </div>
           ))}
         </motion.div>
