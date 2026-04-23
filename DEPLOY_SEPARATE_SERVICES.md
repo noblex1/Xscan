@@ -93,3 +93,17 @@ Important:
 - `client/.env.example` for local/dev.
 - `backend/.env.example` for local/dev.
 - `verify-deployment-config.sh` and `test-deployed-ml.sh` are available for additional checks.
+
+---
+
+## Current deployed URLs
+
+- Frontend: `https://catchers-ai.vercel.app`
+- Backend: `https://catchers-ai.onrender.com`
+- ML service: `https://xscan-hx2f.onrender.com`
+
+Use these values in provider environment variables:
+
+- Frontend `VITE_API_BASE_URL=https://catchers-ai.onrender.com`
+- Backend `CORS_ORIGIN=https://catchers-ai.vercel.app`
+- Backend `ML_SERVICE_URL=https://xscan-hx2f.onrender.com`

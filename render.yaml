@@ -12,12 +12,12 @@ services:
       - key: PORT
         value: 3000
       - key: ML_SERVICE_URL
-        value: https://your-ml-service.example.com
+        value: https://xscan-hx2f.onrender.com
       # Add your environment variables in Render dashboard:
       # - MONGODB_URI
       # - VIRUSTOTAL_API_KEY
       # - GOOGLE_SAFEBROWSING_API_KEY
-      # - CORS_ORIGIN=https://your-frontend-host.example.com
+      # - CORS_ORIGIN=https://catchers-ai.vercel.app
 
   # ML Service (Python)
   - type: web
