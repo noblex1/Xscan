@@ -34,7 +34,10 @@ function isDevelopmentLocalOrigin(origin: string): boolean {
 app.use(helmet());
 app.use(
   cors({
-    origin: (origin, callback) => {
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void
+    ) => {
       // Non-browser clients (curl, health checks, server-to-server) often send no Origin.
       if (!origin) return callback(null, true);
       if (config.corsOrigins.includes(origin)) return callback(null, true);
