@@ -57,7 +57,7 @@ const AnalyzeForm = ({ onSubmit, isLoading }: AnalyzeFormProps) => {
       transition={{ duration: 0.5, delay: 0.4 }}
       className="container max-w-2xl"
     >
-      <div className="rounded-xl border border-border bg-card p-4 sm:p-6 md:p-8 glow-primary">
+      <div className="rounded-xl border border-border bg-card p-4 sm:p-6 md:p-8 shadow-sm">
         <Tabs
           value={tab}
           onValueChange={(v) => setTab(v as AnalyzeMode)}
@@ -66,13 +66,13 @@ const AnalyzeForm = ({ onSubmit, isLoading }: AnalyzeFormProps) => {
           <TabsList className="bg-muted border border-border w-full grid grid-cols-2 h-auto">
             <TabsTrigger
               value="url"
-              className="gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
             >
               <Link className="w-4 h-4" /> URL
             </TabsTrigger>
             <TabsTrigger
               value="file"
-              className="gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              className="gap-1.5 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
             >
               <FileText className="w-4 h-4" /> File / email body
             </TabsTrigger>
@@ -84,7 +84,7 @@ const AnalyzeForm = ({ onSubmit, isLoading }: AnalyzeFormProps) => {
             </p>
             <Textarea
               placeholder="Paste a URL (or text containing an https:// link)…"
-              className="min-h-[100px] bg-input border-border font-mono text-sm resize-none focus:ring-primary focus:border-primary"
+              className="min-h-[100px] bg-input border-border font-mono text-sm resize-none focus:ring-ring focus:border-ring"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
             />
@@ -108,7 +108,7 @@ const AnalyzeForm = ({ onSubmit, isLoading }: AnalyzeFormProps) => {
             </div>
             <Textarea
               placeholder="Paste HTML, email source, or plain text…"
-              className="min-h-[160px] bg-input border-border font-mono text-sm resize-none focus:ring-primary focus:border-primary"
+              className="min-h-[160px] bg-input border-border font-mono text-sm resize-none focus:ring-ring focus:border-ring"
               value={fileContent}
               onChange={(e) => setFileContent(e.target.value)}
             />

@@ -55,16 +55,7 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
   const ml = mlStatusLabel(mlStatus, backendStatus === "offline");
 
   return (
-    <section className="relative py-12 md:py-24 overflow-hidden">
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(hsl(160 100% 45%) 1px, transparent 1px), linear-gradient(90deg, hsl(160 100% 45%) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
+    <section className="py-12 md:py-16">
       <div className="container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -76,8 +67,8 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
             <div
               className={`inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-full border w-full sm:w-auto min-w-0 ${
                 st.warn
-                  ? "border-warning/40 bg-warning/10"
-                  : "border-primary/30 bg-primary/5"
+                  ? "border-warning/25 bg-warning/10 text-warning-foreground"
+                  : "border-border bg-card"
               }`}
             >
               <div
@@ -90,8 +81,8 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
             <div
               className={`inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-full border w-full sm:w-auto min-w-0 ${
                 ml.warn
-                  ? "border-warning/40 bg-warning/10"
-                  : "border-primary/30 bg-primary/5"
+                  ? "border-warning/25 bg-warning/10 text-warning-foreground"
+                  : "border-border bg-card"
               }`}
             >
               <div
@@ -103,13 +94,13 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
             </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold font-heading tracking-tight mb-4 md:mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading tracking-tight mb-4 md:mb-5">
             <span className="text-foreground">Catchers AI</span>
             <br />
-            <span className="text-gradient-primary">Threat scanner</span>
+            <span className="text-muted-foreground">Threat scanner</span>
           </h1>
 
-          <p className="text-base md:text-xl text-muted-foreground max-w-xl mx-auto mb-8 md:mb-12 px-1">
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-10 px-1 leading-relaxed">
             Analyze URLs and file or email content through the same pipeline your backend uses:
             threat intelligence, WHOIS/redirect features, and the ML microservice — exposed here via
             the REST API.
@@ -120,14 +111,14 @@ const HeroSection = ({ backendStatus, mlStatus }: HeroSectionProps) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 max-w-3xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 max-w-4xl mx-auto"
         >
           {features.map((f, i) => (
             <div
               key={i}
-              className="flex flex-col items-center gap-2 p-4 sm:p-5 rounded-lg bg-card border border-border hover:border-primary/40 transition-colors text-center min-w-0"
+              className="flex flex-col items-center gap-2 p-4 sm:p-5 rounded-xl bg-card border border-border text-center min-w-0 shadow-sm"
             >
-              <f.icon className="w-6 h-6 text-primary" />
+              <f.icon className="w-5 h-5 text-primary" />
               <span className="font-heading font-semibold text-foreground text-sm break-words">{f.label}</span>
               <span className="text-[11px] sm:text-xs text-muted-foreground leading-snug break-words">
                 {f.desc}

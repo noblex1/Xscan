@@ -36,8 +36,7 @@ const styles: Record<
     icon: typeof ShieldCheck;
     label: string;
     color: string;
-    bg: string;
-    glow: string;
+    container: string;
     badgeClass: string;
     bar: string;
   }
@@ -46,8 +45,7 @@ const styles: Record<
     icon: ShieldCheck,
     label: "Low risk",
     color: "text-safe",
-    bg: "bg-safe/10 border-safe/30",
-    glow: "glow-safe",
+    container: "bg-card border-border",
     badgeClass: "bg-safe/20 text-safe border-safe/30",
     bar: "bg-safe",
   },
@@ -55,8 +53,7 @@ const styles: Record<
     icon: ShieldAlert,
     label: "Elevated risk",
     color: "text-warning",
-    bg: "bg-warning/10 border-warning/30",
-    glow: "glow-warning",
+    container: "bg-card border-border",
     badgeClass: "bg-warning/20 text-warning border-warning/30",
     bar: "bg-warning",
   },
@@ -64,8 +61,7 @@ const styles: Record<
     icon: ShieldX,
     label: "High / critical risk",
     color: "text-destructive",
-    bg: "bg-destructive/10 border-destructive/30",
-    glow: "glow-destructive",
+    container: "bg-card border-border",
     badgeClass: "bg-destructive/20 text-destructive border-destructive/30",
     bar: "bg-destructive",
   },
@@ -230,13 +226,13 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
       transition={{ duration: 0.4 }}
       className="container max-w-2xl"
     >
-      <div className={`rounded-xl border p-4 sm:p-6 md:p-8 ${c.bg} ${c.glow}`}>
+      <div className={`rounded-xl border p-4 sm:p-6 md:p-8 shadow-sm ${c.container}`}>
         <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3 min-w-0">
             <Icon className={`w-8 h-8 shrink-0 ${c.color}`} />
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className={`text-xl font-heading font-bold ${c.color}`}>{c.label}</h3>
+                <h3 className="text-xl font-heading font-bold text-foreground">{c.label}</h3>
                 <Badge variant="outline" className={`font-mono text-xs ${c.badgeClass}`}>
                   {resultLabel(result.riskCategory)}
                 </Badge>
@@ -276,7 +272,7 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
           <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
             Threat score
           </span>
-          <span className={`text-2xl font-heading font-bold tabular-nums ${c.color}`}>
+          <span className="text-2xl font-heading font-bold tabular-nums text-foreground">
             {score}
             <span className="text-sm font-normal text-muted-foreground">/100</span>
           </span>

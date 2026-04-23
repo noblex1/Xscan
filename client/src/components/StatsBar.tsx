@@ -43,7 +43,7 @@ const StatsBar = ({ stats, isLoading, error }: Props) => {
       transition={{ duration: 0.35 }}
       className="container max-w-2xl"
     >
-      <div className="rounded-xl border border-border bg-card/80 p-3 sm:p-4 md:p-5">
+      <div className="rounded-xl border border-border bg-card p-3 sm:p-4 md:p-5 shadow-sm">
         <div className="flex flex-wrap items-center gap-2 mb-3">
           <BarChart3 className="w-4 h-4 text-primary" />
           <h2 className="text-sm font-heading font-semibold text-foreground">
@@ -51,15 +51,15 @@ const StatsBar = ({ stats, isLoading, error }: Props) => {
           </h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-4">
-          <div className="rounded-lg bg-muted/40 p-2">
+          <div className="rounded-lg bg-muted/60 p-2">
             <p className="text-[10px] font-mono text-muted-foreground uppercase">Total</p>
             <p className="text-lg font-heading font-bold tabular-nums">{stats.totalScans}</p>
           </div>
-          <div className="rounded-lg bg-muted/40 p-2">
+          <div className="rounded-lg bg-muted/60 p-2">
             <p className="text-[10px] font-mono text-muted-foreground uppercase">24h</p>
             <p className="text-lg font-heading font-bold tabular-nums">{stats.recentScans}</p>
           </div>
-          <div className="rounded-lg bg-muted/40 p-2 col-span-2 sm:col-span-1">
+          <div className="rounded-lg bg-muted/60 p-2 col-span-2 sm:col-span-1">
             <p className="text-[10px] font-mono text-muted-foreground uppercase">Avg score</p>
             <p className="text-lg font-heading font-bold tabular-nums">{avg}</p>
           </div>

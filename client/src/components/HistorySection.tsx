@@ -45,7 +45,7 @@ const HistorySection = ({
     >
       <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
         <div className="flex items-center gap-2 min-w-0">
-          <Clock className="w-4 h-4 text-muted-foreground" />
+          <Clock className="w-4 h-4 text-primary" />
           <h2 className="text-lg font-heading font-semibold text-foreground">
             Scan history
           </h2>
@@ -106,7 +106,7 @@ const HistorySection = ({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
-                className="flex items-start sm:items-center gap-3 p-3 rounded-lg bg-card border border-border hover:border-primary/20 transition-colors"
+                className="flex items-start sm:items-center gap-3 p-3 rounded-lg bg-card border border-border shadow-sm"
               >
                 <Icon className={`w-5 h-5 shrink-0 ${r.color}`} />
                 <div className="flex-1 min-w-0">

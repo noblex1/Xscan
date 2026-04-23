@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import HeroSection, { type BackendStatus, type MlStatus } from "@/components/HeroSection";
+import AppHeader from "@/components/AppHeader";
 import AnalyzeForm, { type AnalyzeMode, type AnalyzePayload } from "@/components/AnalyzeForm";
 import ResultCard from "@/components/ResultCard";
 import HistorySection from "@/components/HistorySection";
@@ -189,6 +190,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AppHeader />
       <HeroSection backendStatus={backendStatus} mlStatus={mlStatus} />
       <div className="space-y-8 pb-16">
         <StatsBar
@@ -196,21 +198,25 @@ const Index = () => {
           isLoading={statsQuery.isLoading}
           error={statsError}
         />
-        <HowItWorksSection />
-        <div id="scan-form">
+        <div id="how-it-works" className="scroll-mt-20">
+          <HowItWorksSection />
+        </div>
+        <div id="scan-form" className="scroll-mt-20">
           <AnalyzeForm onSubmit={handleAnalyze} isLoading={isLoading} />
         </div>
         {result && (
           <ResultCard result={result} mode={lastMode} sourceLabel={sourceLabel} />
         )}
-        <HistorySection
-          scans={historyQuery.data?.scans ?? []}
-          isLoading={historyQuery.isFetching}
-          isClearing={isClearingHistory}
-          onRefresh={() => void historyQuery.refetch()}
-          onClear={() => void handleClearHistory()}
-          errorMessage={historyError}
-        />
+        <div id="scan-history" className="scroll-mt-20">
+          <HistorySection
+            scans={historyQuery.data?.scans ?? []}
+            isLoading={historyQuery.isFetching}
+            isClearing={isClearingHistory}
+            onRefresh={() => void historyQuery.refetch()}
+            onClear={() => void handleClearHistory()}
+            errorMessage={historyError}
+          />
+        </div>
       </div>
     </div>
   );
