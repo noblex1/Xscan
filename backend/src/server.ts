@@ -37,22 +37,34 @@ app.use('/health', cors());
 app.use('/ready', cors());
 
 // Keep stricter CORS policy for API endpoints.
-app.use(
-  '/api/v1',
-  cors({
-    origin: (
-      origin: string | undefined,
-      callback: (err: Error | null, allow?: boolean) => void
-    ) => {
-      // Non-browser clients (curl, health checks, server-to-server) often send no Origin.
-      if (!origin) return callback(null, true);
-      if (config.corsOrigins.includes(origin)) return callback(null, true);
-      if (isDevelopmentLocalOrigin(origin)) return callback(null, true);
-      return callback(new Error('Not allowed by CORS'));
-    },
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: (
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) => {
+    // Non-browser clients (curl, health checks, server-to-server) often send no Origin.
+    if (!origin) return callback(null, true);
+
+    // Normalize origin for comparison (strip trailing slash and lowercase)
+    const normalize = (o: string) => o.replace(/\/$/, '').toLowerCase();
+    const incoming = normalize(origin);
+
+    // Check configured origins with normalization
+    const allowed = config.corsOrigins.map((o) => normalize(o));
+    if (allowed.includes(incoming)) return callback(null, true);
+
+    if (isDevelopmentLocalOrigin(origin)) return callback(null, true);
+
+    // Helpful logging to diagnose deployed rejections
+    console.warn(`CORS blocked origin: ${origin}. Allowed: ${config.corsOrigins.join(', ')}`);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+};
+
+app.use('/api/v1', cors(corsOptions));
+// Explicitly respond to preflight OPTIONS requests for API endpoints.
+app.options('/api/v1/*', cors(corsOptions));
 
 // Compression
 app.use(compression());
