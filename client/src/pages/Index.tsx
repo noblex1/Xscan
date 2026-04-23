@@ -137,10 +137,7 @@ const Index = () => {
     }
   };
 
-  const handleClearHistory = async () => {
-    const ok = window.confirm("Clear all scan history? This cannot be undone.");
-    if (!ok) return;
-
+  const confirmClearHistory = async () => {
     setIsClearingHistory(true);
     try {
       const data = await clearScanHistory();
@@ -158,6 +155,22 @@ const Index = () => {
     } finally {
       setIsClearingHistory(false);
     }
+  };
+
+  const handleClearHistory = () => {
+    if (isClearingHistory) return;
+    toast("Clear all scan history?", {
+      description: "This will permanently remove all saved scan records.",
+      action: {
+        label: "Yes, clear",
+        onClick: () => {
+          void confirmClearHistory();
+        },
+      },
+      cancel: {
+        label: "Cancel",
+      },
+    });
   };
 
   const historyError =
