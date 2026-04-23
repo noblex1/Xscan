@@ -32,7 +32,13 @@ function isDevelopmentLocalOrigin(origin: string): boolean {
 
 // Security middleware
 app.use(helmet());
+// Allow health checks from any origin (deployment probes and external uptime checks).
+app.use('/health', cors());
+app.use('/ready', cors());
+
+// Keep stricter CORS policy for API endpoints.
 app.use(
+  '/api/v1',
   cors({
     origin: (
       origin: string | undefined,
