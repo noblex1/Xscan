@@ -42,6 +42,13 @@ async function requestJson<T>(
   init?: RequestInit
 ): Promise<T> {
   const origin = getApiOrigin();
+  if (!origin && import.meta.env.PROD) {
+    throw new ApiRequestError(
+      "Missing VITE_API_BASE_URL in production frontend environment",
+      0,
+      null
+    );
+  }
   const url = `${origin}${path}`;
   const res = await fetch(url, {
     ...init,
@@ -77,6 +84,13 @@ async function requestJson<T>(
 
 export async function fetchHealth(): Promise<HealthResponse> {
   const origin = getApiOrigin();
+  if (!origin && import.meta.env.PROD) {
+    throw new ApiRequestError(
+      "Missing VITE_API_BASE_URL in production frontend environment",
+      0,
+      null
+    );
+  }
   const res = await fetch(`${origin}/health`);
   if (!res.ok) {
     throw new ApiRequestError("Health check failed", res.status, null);

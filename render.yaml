@@ -12,7 +12,7 @@ services:
       - key: PORT
         value: 3000
       - key: ML_SERVICE_URL
-        value: https://ml-service-yiwg.onrender.com
+        value: https://your-ml-service.example.com
       # Add your environment variables in Render dashboard:
       # - MONGODB_URI
       # - VIRUSTOTAL_API_KEY
