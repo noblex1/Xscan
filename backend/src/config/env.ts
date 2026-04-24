@@ -11,7 +11,7 @@ const envSchema = z.object({
   // CORS_ORIGIN=http://localhost:8080,https://your-frontend.example.com
   CORS_ORIGIN: z
     .string()
-    .default('https://catchers-ai.vercel.app,https://catchers-ai.onrender.com,https://xscan-hx2f.onrender.com,http://localhost:8080,http://127.0.0.1:8080,http://[::1]:8080'),
+    .default('https://catchers-ai.vercel.app,http://localhost:8080,http://127.0.0.1:8080,http://[::1]:8080'),
 
   // API keys (optional; individual services can decide behavior when missing)
   VIRUSTOTAL_API_KEY: z.string().optional(),
