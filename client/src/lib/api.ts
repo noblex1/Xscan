@@ -27,6 +27,24 @@ function getApiOrigin(): string {
   return "";
 }
 
+function getOrCreateOwnerId(): string | null {
+  try {
+    const key = 'xscan_owner_id';
+    let id = localStorage.getItem(key);
+    if (id) return id;
+    // Simple UUID v4 generator
+    id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+    localStorage.setItem(key, id);
+    return id;
+  } catch {
+    return null;
+  }
+}
+
 async function parseJsonSafe(res: Response): Promise<unknown> {
   const text = await res.text();
   if (!text) return null;
@@ -55,6 +73,8 @@ async function requestJson<T>(
     headers: {
       "Content-Type": "application/json",
       ...(init?.headers ?? {}),
+      // Attach per-device owner id so server can scope history to this device.
+      ...(getOrCreateOwnerId() ? { 'x-owner-id': getOrCreateOwnerId() as string } : {}),
     },
   });
 

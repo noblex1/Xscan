@@ -40,6 +40,9 @@ export class ThreatController {
 
       // Asynchronous logging (best-effort)
       try {
+        const ownerId = (req.headers['x-owner-id'] as string) || (req.headers['x-ownerid'] as string) || null;
+        const isPublic = !!req.body?.isPublic;
+
         const scanHistory = new ScanHistory({
           url: analysisResult.url,
           normalizedUrl: analysisResult.url, // placeholder for normalization
@@ -59,6 +62,8 @@ export class ThreatController {
           technicalDetails: analysisResult.technicalDetails,
           processingTime: analysisResult.processingTime,
           ipAddress: req.ip,
+          ownerId,
+          isPublic,
         });
 
         scanHistory.save().catch((err: any) => {
@@ -159,6 +164,16 @@ export class ThreatController {
       const riskCategory = req.query.riskCategory as string | undefined;
 
       const query: any = {};
+      // Determine owner-based visibility: if an ownerId header is provided, return that owner's scans by default.
+      // Otherwise, only return public scans.
+      const ownerId = (req.headers['x-owner-id'] as string) || (req.headers['x-ownerid'] as string) || undefined;
+
+      if (ownerId) {
+        query.ownerId = ownerId;
+      } else {
+        // No owner provided: only public entries
+        query.isPublic = true;
+      }
       if (riskCategory) {
         query.riskCategory = riskCategory;
       }

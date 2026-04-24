@@ -82,6 +82,9 @@ const ScanHistorySchema = new Schema<IScanHistory>(
     processingTime: { type: String, required: true },
     virusTotalScanId: { type: String },
     ipAddress: { type: String, index: true },
+    // Owner and visibility
+    ownerId: { type: String, index: true },
+    isPublic: { type: Boolean, default: false, index: true },
     // Optional fields for continuous learning
     userFeedback: { type: Schema.Types.Mixed },
     verifiedLabel: { type: Boolean, default: null },
