@@ -230,15 +230,15 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
         <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3 min-w-0">
             <Icon className={`w-8 h-8 shrink-0 ${c.color}`} />
-            <div className="min-w-0">
+            <div className="min-w-0 overflow-hidden">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-xl font-heading font-bold text-foreground">{c.label}</h3>
+                <h3 className="text-xl font-heading font-bold text-foreground truncate">{c.label}</h3>
                 <Badge variant="outline" className={`font-mono text-xs ${c.badgeClass}`}>
                   {resultLabel(result.riskCategory)}
                 </Badge>
               </div>
               <p
-                className="text-xs sm:text-sm text-muted-foreground font-mono break-all sm:break-normal sm:truncate"
+                className="text-xs sm:text-sm text-muted-foreground font-mono truncate"
                 title={sourceLabel}
               >
                 {sourceLabel}
@@ -286,8 +286,8 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
           />
         </div>
 
-        <p className="font-medium text-foreground text-sm mb-2">{result.recommendation}</p>
-        <p className="text-foreground/80 text-sm mb-4 whitespace-pre-wrap">{result.aiAnalysis}</p>
+        <p className="font-medium text-foreground text-sm mb-2 overflow-hidden break-words">{result.recommendation}</p>
+        <p className="text-foreground/80 text-sm mb-4 whitespace-pre-wrap break-words overflow-hidden">{result.aiAnalysis}</p>
 
         <Accordion type="multiple" className="w-full border-t border-border/50 pt-2">
           {(result.riskFactors?.length ?? 0) > 0 && (
@@ -350,7 +350,7 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
                       )}
                     </div>
                     {m.details && (
-                      <p className="text-xs text-muted-foreground font-mono">{m.details}</p>
+                      <p className="text-xs text-muted-foreground font-mono break-words">{m.details}</p>
                     )}
                   </div>
                 ))}

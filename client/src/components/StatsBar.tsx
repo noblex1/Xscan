@@ -51,15 +51,15 @@ const StatsBar = ({ stats, isLoading, error }: Props) => {
           </h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mb-4">
-          <div className="rounded-lg bg-muted/60 p-2">
+          <div className="rounded-lg bg-muted/60 p-2 min-w-0 overflow-hidden">
             <p className="text-[10px] font-mono text-muted-foreground uppercase">Total</p>
             <p className="text-lg font-heading font-bold tabular-nums">{stats.totalScans}</p>
           </div>
-          <div className="rounded-lg bg-muted/60 p-2">
+          <div className="rounded-lg bg-muted/60 p-2 min-w-0 overflow-hidden">
             <p className="text-[10px] font-mono text-muted-foreground uppercase">24h</p>
             <p className="text-lg font-heading font-bold tabular-nums">{stats.recentScans}</p>
           </div>
-          <div className="rounded-lg bg-muted/60 p-2 col-span-2 sm:col-span-1">
+          <div className="rounded-lg bg-muted/60 p-2 col-span-2 sm:col-span-1 min-w-0 overflow-hidden">
             <p className="text-[10px] font-mono text-muted-foreground uppercase">Avg score</p>
             <p className="text-lg font-heading font-bold tabular-nums">{avg}</p>
           </div>

@@ -108,10 +108,10 @@ const HistorySection = ({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
-                className="flex items-start sm:items-center gap-3 p-3 rounded-lg bg-card border border-border shadow-sm"
+                className="flex items-start sm:items-center gap-3 p-3 rounded-lg bg-card border border-border shadow-sm min-w-0"
               >
                 <Icon className={`w-5 h-5 shrink-0 ${r.color}`} />
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 overflow-hidden">
                   <p className="text-sm text-foreground truncate font-mono" title={title}>
                     {title.length > 72 ? `${title.slice(0, 72)}…` : title}
                   </p>
