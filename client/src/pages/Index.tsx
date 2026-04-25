@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import HeroSection, { type BackendStatus, type MlStatus } from "@/components/HeroSection";
 import AppHeader from "@/components/AppHeader";
@@ -13,6 +13,53 @@ import { extractUrlFromInput } from "@/lib/urlUtils";
 import type { ThreatAnalysisResult } from "@/types/threat";
 import { toast } from "sonner";
 
+type ScanStepStatus = "pending" | "active" | "complete";
+
+interface ScanStep {
+  id: string;
+  label: string;
+  status: ScanStepStatus;
+}
+
+const scanBlueprint: Record<AnalyzeMode, Array<{ id: string; label: string; threshold: number }>> = {
+  url: [
+    { id: "normalize", label: "Normalize and validate URL", threshold: 8 },
+    { id: "intel", label: "Threat-intelligence lookups", threshold: 35 },
+    { id: "heuristics", label: "Heuristic and redirect checks", threshold: 62 },
+    { id: "ml", label: "ML scoring and confidence analysis", threshold: 84 },
+    { id: "result", label: "Compiling final decision", threshold: 100 },
+  ],
+  file: [
+    { id: "parse", label: "Parse filename and file content", threshold: 10 },
+    { id: "extract", label: "Extract suspicious tokens and patterns", threshold: 38 },
+    { id: "heuristics", label: "HTML/form/script heuristic checks", threshold: 65 },
+    { id: "ml", label: "ML content risk scoring", threshold: 86 },
+    { id: "result", label: "Compiling final decision", threshold: 100 },
+  ],
+};
+
+function toSteps(mode: AnalyzeMode, progress: number): ScanStep[] {
+  const blueprint = scanBlueprint[mode];
+  const activeIndex = blueprint.findIndex((step) => progress < step.threshold);
+  const currentIndex = activeIndex === -1 ? blueprint.length - 1 : activeIndex;
+
+  return blueprint.map((step, idx) => {
+    if (progress >= 100 || idx < currentIndex) {
+      return { id: step.id, label: step.label, status: "complete" };
+    }
+    if (idx === currentIndex) {
+      return { id: step.id, label: step.label, status: "active" };
+    }
+    return { id: step.id, label: step.label, status: "pending" };
+  });
+}
+
+function toStageLabel(mode: AnalyzeMode, progress: number): string {
+  const blueprint = scanBlueprint[mode];
+  const current = blueprint.find((step) => progress < step.threshold) ?? blueprint[blueprint.length - 1];
+  return current.label;
+}
+
 const Index = () => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +69,12 @@ const Index = () => {
   const [backendStatus, setBackendStatus] = useState<BackendStatus>("checking");
   const [mlStatus, setMlStatus] = useState<MlStatus>("checking");
   const [isClearingHistory, setIsClearingHistory] = useState(false);
+  const [scanMode, setScanMode] = useState<AnalyzeMode>("url");
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanStage, setScanStage] = useState("Ready to scan");
+  const scanTimerRef = useRef<number | null>(null);
+
+  const scanSteps = useMemo(() => toSteps(scanMode, scanProgress), [scanMode, scanProgress]);
 
   const historyQuery = useQuery({
     queryKey: ["scanHistory"],
@@ -83,20 +136,45 @@ const Index = () => {
   }, []);
 
   const handleAnalyze = async (payload: AnalyzePayload) => {
+    if (scanTimerRef.current) {
+      window.clearInterval(scanTimerRef.current);
+      scanTimerRef.current = null;
+    }
+
+    setScanMode(payload.mode);
+    setScanProgress(8);
+    setScanStage(toStageLabel(payload.mode, 8));
     setIsLoading(true);
     setResult(null);
+
+    scanTimerRef.current = window.setInterval(() => {
+      setScanProgress((prev) => {
+        const next = Math.min(prev + Math.floor(Math.random() * 7 + 3), 92);
+        setScanStage(toStageLabel(payload.mode, next));
+        return next;
+      });
+    }, 420);
+
     try {
+      let data: ThreatAnalysisResult;
+
       if (payload.mode === "url") {
         const raw = payload.url?.trim() ?? "";
         const url = extractUrlFromInput(raw);
         if (!url) {
           toast.error("Could not find a valid http(s) URL. Paste a full URL or text containing one.");
+          if (scanTimerRef.current) {
+            window.clearInterval(scanTimerRef.current);
+            scanTimerRef.current = null;
+          }
+          setScanProgress(0);
+          setScanStage("Ready to scan");
           setIsLoading(false);
           return;
         }
         setLastMode("url");
         setSourceLabel(url);
-        const data = await analyzeUrl(url);
+        data = await analyzeUrl(url);
         setResult(data);
         toast.success("URL analysis complete");
       } else {
@@ -107,7 +185,7 @@ const Index = () => {
         }
         setLastMode("file");
         setSourceLabel(payload.fileName ?? "file");
-        const data = await analyzeFile(
+        data = await analyzeFile(
           payload.fileName ?? "pasted-content.txt",
           content,
           payload.fileType
@@ -136,6 +214,8 @@ const Index = () => {
       }
       await queryClient.invalidateQueries({ queryKey: ["scanHistory"] });
       await queryClient.invalidateQueries({ queryKey: ["threatStatistics"] });
+      setScanProgress(100);
+      setScanStage("Scan complete");
     } catch (e) {
       const msg =
         e instanceof ApiRequestError
@@ -145,10 +225,27 @@ const Index = () => {
             : "Analysis failed";
       toast.error(msg);
       void refreshHealth();
+      setScanStage("Scan failed");
     } finally {
+      if (scanTimerRef.current) {
+        window.clearInterval(scanTimerRef.current);
+        scanTimerRef.current = null;
+      }
       setIsLoading(false);
+      window.setTimeout(() => {
+        setScanProgress(0);
+        setScanStage("Ready to scan");
+      }, 900);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (scanTimerRef.current) {
+        window.clearInterval(scanTimerRef.current);
+      }
+    };
+  }, []);
 
   const confirmClearHistory = async () => {
     setIsClearingHistory(true);
@@ -214,7 +311,13 @@ const Index = () => {
           <HowItWorksSection />
         </div>
         <div id="scan-form" className="scroll-mt-20">
-          <AnalyzeForm onSubmit={handleAnalyze} isLoading={isLoading} />
+          <AnalyzeForm
+            onSubmit={handleAnalyze}
+            isLoading={isLoading}
+            scanProgress={scanProgress}
+            scanStage={scanStage}
+            scanSteps={scanSteps}
+          />
         </div>
         {result && (
           <ResultCard result={result} mode={lastMode} sourceLabel={sourceLabel} />
