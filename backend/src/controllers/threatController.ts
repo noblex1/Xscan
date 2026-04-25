@@ -123,6 +123,7 @@ export class ThreatController {
       });
 
       try {
+        const ownerId = (req.headers['x-owner-id'] as string) || (req.headers['x-ownerid'] as string) || null;
         const scanHistory = new ScanHistory({
           fileName: analysisResult.fileName,
           fileType: analysisResult.fileType,
@@ -136,6 +137,7 @@ export class ThreatController {
           technicalDetails: analysisResult.technicalDetails,
           processingTime: analysisResult.processingTime,
           ipAddress: req.ip,
+          ownerId,
         });
 
         scanHistory.save().catch((err: any) => {
@@ -267,7 +269,14 @@ export class ThreatController {
    */
   async clearScanHistory(_req: Request, res: Response): Promise<void> {
     try {
-      const deleted = await ScanHistory.deleteMany({});
+      const ownerId = (_req.headers['x-owner-id'] as string) || (_req.headers['x-ownerid'] as string) || null;
+
+      if (!ownerId) {
+        res.status(403).json({ success: false, error: 'Owner id required to clear history' });
+        return;
+      }
+
+      const deleted = await ScanHistory.deleteMany({ ownerId });
 
       res.json({
         success: true,

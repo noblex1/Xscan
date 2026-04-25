@@ -7,15 +7,8 @@ import ResultCard from "@/components/ResultCard";
 import HistorySection from "@/components/HistorySection";
 import StatsBar from "@/components/StatsBar";
 import HowItWorksSection from "@/components/HowItWorksSection";
-import {
-  analyzeFile,
-  analyzeUrl,
-  ApiRequestError,
-  clearScanHistory,
-  fetchHealth,
-  fetchScanHistory,
-  fetchStatistics,
-} from "@/lib/api";
+import { analyzeFile, analyzeUrl, ApiRequestError, fetchHealth, fetchStatistics } from "@/lib/api";
+import { fetchLocalHistory, clearLocalHistory, addLocalHistoryEntry } from "@/lib/localHistory";
 import { extractUrlFromInput } from "@/lib/urlUtils";
 import type { ThreatAnalysisResult } from "@/types/threat";
 import { toast } from "sonner";
@@ -32,7 +25,7 @@ const Index = () => {
 
   const historyQuery = useQuery({
     queryKey: ["scanHistory"],
-    queryFn: () => fetchScanHistory({ limit: 30, skip: 0 }),
+    queryFn: () => fetchLocalHistory({ limit: 30, skip: 0 }),
     retry: 1,
   });
 
@@ -122,6 +115,25 @@ const Index = () => {
         setResult(data);
         toast.success("File analysis complete");
       }
+      // Persist to session-local history so each browser only sees its own scans
+      try {
+        await addLocalHistoryEntry({
+          url: payload.mode === 'url' ? (payload.url ?? '') : undefined,
+          fileName: payload.mode === 'file' ? payload.fileName : undefined,
+          threatScore: data.threatScore,
+          riskCategory: data.riskCategory,
+          recommendation: data.recommendation,
+          aiAnalysis: data.aiAnalysis,
+          riskFactors: data.riskFactors,
+          securityFeatures: data.securityFeatures,
+          detectionMethods: data.detectionMethods,
+          technicalDetails: data.technicalDetails,
+          processingTime: data.processingTime,
+          createdAt: new Date().toISOString(),
+        });
+      } catch {
+        // ignore session storage errors
+      }
       await queryClient.invalidateQueries({ queryKey: ["scanHistory"] });
       await queryClient.invalidateQueries({ queryKey: ["threatStatistics"] });
     } catch (e) {
@@ -141,10 +153,10 @@ const Index = () => {
   const confirmClearHistory = async () => {
     setIsClearingHistory(true);
     try {
-      const data = await clearScanHistory();
+      await clearLocalHistory();
       await queryClient.invalidateQueries({ queryKey: ["scanHistory"] });
       await queryClient.invalidateQueries({ queryKey: ["threatStatistics"] });
-      toast.success(`Scan history cleared (${data.deletedCount} deleted)`);
+      toast.success(`Scan history cleared`);
     } catch (e) {
       const msg =
         e instanceof ApiRequestError
@@ -214,22 +226,6 @@ const Index = () => {
             isClearing={isClearingHistory}
             onRefresh={() => void historyQuery.refetch()}
             onClear={() => void handleClearHistory()}
-            onTogglePublic={async (id: string, makePublic: boolean) => {
-              try {
-                const origin = import.meta.env.VITE_API_BASE_URL || '';
-                const url = `${origin.replace(/\/$/, '')}/api/v1/threats/${id}/visibility`;
-                const res = await fetch(url, {
-                  method: 'PATCH',
-                  headers: { 'Content-Type': 'application/json', 'x-owner-id': localStorage.getItem('xscan_owner_id') || '' },
-                  body: JSON.stringify({ isPublic: !!makePublic }),
-                });
-                if (!res.ok) throw new Error('Failed to update visibility');
-                await queryClient.invalidateQueries({ queryKey: ['scanHistory'] });
-                toast.success('Visibility updated');
-              } catch (e) {
-                toast.error((e as Error).message || 'Failed to update visibility');
-              }
-            }}
             errorMessage={historyError}
           />
         </div>
