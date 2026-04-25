@@ -45,12 +45,10 @@ const HistorySection = ({
       transition={{ duration: 0.4 }}
       className="container max-w-2xl"
     >
-      <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
-        <div className="flex items-center gap-2 min-w-0">
-          <Clock className="w-4 h-4 text-primary" />
-          <h2 className="text-lg font-heading font-semibold text-foreground">
-            Scan history
-          </h2>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2">
+          <Clock className="h-4 w-4 text-primary" />
+          <h2 className="text-lg font-heading font-semibold text-foreground">Scan history</h2>
         </div>
         <div className="flex items-center gap-1">
           {onRefresh && (
@@ -59,10 +57,10 @@ const HistorySection = ({
               size="sm"
               onClick={onRefresh}
               disabled={isLoading || isClearing}
-              className="text-muted-foreground gap-1 text-xs"
+              className="gap-1 text-xs text-muted-foreground"
               type="button"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
+              <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
               Refresh
             </Button>
           )}
@@ -72,28 +70,20 @@ const HistorySection = ({
               size="sm"
               onClick={onClear}
               disabled={isLoading || isClearing || scans.length === 0}
-              className="text-destructive gap-1 text-xs hover:text-destructive"
+              className="gap-1 text-xs text-destructive hover:text-destructive"
               type="button"
             >
-              <Trash2 className={`w-3.5 h-3.5 ${isClearing ? "animate-pulse" : ""}`} />
+              <Trash2 className={`h-3.5 w-3.5 ${isClearing ? "animate-pulse" : ""}`} />
               {isClearing ? "Clearing..." : "Clear"}
             </Button>
           )}
         </div>
       </div>
 
-      {errorMessage && (
-        <p className="text-sm text-destructive mb-3 font-mono">{errorMessage}</p>
-      )}
-
-      {!errorMessage && scans.length === 0 && !isLoading && (
-        <p className="text-sm text-muted-foreground">
-          No scans stored yet. Run an analysis above; results are saved on the server when MongoDB is connected.
-        </p>
-      )}
+      {errorMessage && <p className="mb-3 font-mono text-sm text-destructive">{errorMessage}</p>}
 
       {isLoading && scans.length === 0 && (
-        <p className="text-sm text-muted-foreground font-mono">Loading history…</p>
+        <p className="font-mono text-sm text-muted-foreground">Loading history...</p>
       )}
 
       <div className="space-y-2">
@@ -108,25 +98,25 @@ const HistorySection = ({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
-                className="flex items-start sm:items-center gap-3 p-3 rounded-lg bg-card border border-border shadow-sm min-w-0"
+                className="flex min-w-0 items-start gap-3 rounded-lg border border-border bg-card p-3 shadow-sm sm:items-center"
               >
-                <Icon className={`w-5 h-5 shrink-0 ${r.color}`} />
-                <div className="flex-1 min-w-0 overflow-hidden">
-                  <p className="text-sm text-foreground truncate font-mono" title={title}>
-                    {title.length > 72 ? `${title.slice(0, 72)}…` : title}
+                <Icon className={`h-5 w-5 shrink-0 ${r.color}`} />
+                <div className="min-w-0 flex-1 overflow-hidden">
+                  <p className="truncate font-mono text-sm text-foreground" title={title}>
+                    {title.length > 72 ? `${title.slice(0, 72)}...` : title}
                   </p>
-                  <p className="text-[11px] sm:text-xs text-muted-foreground break-words">
+                  <p className="break-words text-[11px] text-muted-foreground sm:text-xs">
                     <span className="font-mono">{r.label}</span>
-                    {" · "}
+                    {" | "}
                     score {item.threatScore}
-                    {" · "}
+                    {" | "}
                     {new Date(item.createdAt).toLocaleString()}
                   </p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  {typeof onTogglePublic === 'function' && (
+                  {typeof onTogglePublic === "function" && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground font-mono">Share</span>
+                      <span className="font-mono text-xs text-muted-foreground">Share</span>
                       <Switch
                         checked={!!item.isPublic}
                         onCheckedChange={(v) => onTogglePublic(item._id, !!v)}
