@@ -98,8 +98,24 @@ export class ThreatController {
       }
 
       // Validate file size (max 10MB)
-      const fileSizeInBytes = new Blob([fileContent]).size;
       const maxSizeInBytes = 10 * 1024 * 1024; // 10MB
+      let fileSizeInBytes = 0;
+      try {
+        // Prefer Buffer.byteLength on the server for Node environments
+        // (Blob may not be available or typed in some Node setups)
+        // `fileContent` is expected to be a string; compute its byte length.
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        fileSizeInBytes = Buffer.byteLength(fileContent as string, 'utf8');
+      } catch {
+        try {
+          // Fallback for environments where Buffer isn't available
+          // (shouldn't happen on Node) — attempt Blob size.
+          // @ts-ignore Blob may be unavailable in Node typings
+          fileSizeInBytes = new Blob([fileContent]).size;
+        } catch {
+          fileSizeInBytes = 0;
+        }
+      }
 
       if (fileSizeInBytes > maxSizeInBytes) {
         res.status(400).json({
@@ -319,15 +335,17 @@ export class ThreatController {
         return;
       }
 
-      if (scan.ownerId !== ownerId) {
+      const recordOwner = scan.get('ownerId') as string | undefined;
+      if (recordOwner !== ownerId) {
         res.status(403).json({ success: false, error: 'Not authorized' });
         return;
       }
 
-      scan.isPublic = !!isPublic;
+      // Use Mongoose getters/setters to avoid TS typing issues on the document
+      scan.set('isPublic', !!isPublic);
       await scan.save();
 
-      res.json({ success: true, data: { id: scanId, isPublic: scan.isPublic } });
+      res.json({ success: true, data: { id: scanId, isPublic: scan.get('isPublic') } });
     } catch (error: any) {
       console.error('Error setting scan visibility:', error);
       res.status(500).json({ success: false, error: 'Internal server error' });

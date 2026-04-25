@@ -38,6 +38,8 @@ export interface IScanHistory extends Document {
   virusTotalScanId?: string;
   // IP address if available
   ipAddress?: string;
+  ownerId?: string;
+  isPublic?: boolean;
   userFeedback?: unknown;
   verifiedLabel?: boolean | null;
 }
