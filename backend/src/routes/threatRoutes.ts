@@ -197,4 +197,11 @@ router.delete('/history', (req, res) => threatController.clearScanHistory(req, r
  */
 router.get('/statistics', (req, res) => threatController.getStatistics(req, res));
 
+// Toggle visibility of a scan (owner-only)
+router.patch('/history/:id/visibility', (req, res) => threatController.setScanVisibility(req, res));
+
 export default router;
+
+// Toggle visibility of a scan (owner-only)
+// NOTE: placed after export to avoid reordering large swagger comments — router already exported above.
+// The actual handler is added by importing this module; ensure server loads routes before calling.

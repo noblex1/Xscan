@@ -283,6 +283,47 @@ export class ThreatController {
       });
     }
   }
+
+  /**
+   * Set visibility (public/private) for a scan
+   */
+  async setScanVisibility(req: Request, res: Response): Promise<void> {
+    try {
+      const scanId = req.params.id;
+      const { isPublic } = req.body;
+
+      if (!scanId) {
+        res.status(400).json({ success: false, error: 'Scan id is required' });
+        return;
+      }
+
+      // Owner must match
+      const ownerId = (req.headers['x-owner-id'] as string) || (req.headers['x-ownerid'] as string) || null;
+      if (!ownerId) {
+        res.status(403).json({ success: false, error: 'Owner id required' });
+        return;
+      }
+
+      const scan = await ScanHistory.findById(scanId);
+      if (!scan) {
+        res.status(404).json({ success: false, error: 'Scan not found' });
+        return;
+      }
+
+      if (scan.ownerId !== ownerId) {
+        res.status(403).json({ success: false, error: 'Not authorized' });
+        return;
+      }
+
+      scan.isPublic = !!isPublic;
+      await scan.save();
+
+      res.json({ success: true, data: { id: scanId, isPublic: scan.isPublic } });
+    } catch (error: any) {
+      console.error('Error setting scan visibility:', error);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+  }
 }
 
 export const threatController = new ThreatController();

@@ -214,6 +214,22 @@ const Index = () => {
             isClearing={isClearingHistory}
             onRefresh={() => void historyQuery.refetch()}
             onClear={() => void handleClearHistory()}
+            onTogglePublic={async (id: string, makePublic: boolean) => {
+              try {
+                const origin = import.meta.env.VITE_API_BASE_URL || '';
+                const url = `${origin.replace(/\/$/, '')}/api/v1/threats/${id}/visibility`;
+                const res = await fetch(url, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json', 'x-owner-id': localStorage.getItem('xscan_owner_id') || '' },
+                  body: JSON.stringify({ isPublic: !!makePublic }),
+                });
+                if (!res.ok) throw new Error('Failed to update visibility');
+                await queryClient.invalidateQueries({ queryKey: ['scanHistory'] });
+                toast.success('Visibility updated');
+              } catch (e) {
+                toast.error((e as Error).message || 'Failed to update visibility');
+              }
+            }}
             errorMessage={historyError}
           />
         </div>

@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, ShieldCheck, ShieldAlert, ShieldX, RefreshCw, Trash2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import type { RiskCategory, ScanHistoryDocument } from "@/types/threat";
 
@@ -19,6 +20,7 @@ interface Props {
   isClearing?: boolean;
   onRefresh?: () => void;
   onClear?: () => void;
+  onTogglePublic?: (id: string, makePublic: boolean) => Promise<void>;
   errorMessage?: string | null;
 }
 
@@ -120,6 +122,17 @@ const HistorySection = ({
                     {" · "}
                     {new Date(item.createdAt).toLocaleString()}
                   </p>
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  {typeof onTogglePublic === 'function' && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground font-mono">Share</span>
+                      <Switch
+                        checked={!!item.isPublic}
+                        onCheckedChange={(v) => onTogglePublic(item._id, !!v)}
+                      />
+                    </div>
+                  )}
                 </div>
               </motion.div>
             );

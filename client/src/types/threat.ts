@@ -74,6 +74,7 @@ export interface ScanHistoryDocument {
   processingTime: string;
   createdAt: string;
   aiAnalysis?: string;
+  isPublic?: boolean;
 }
 
 export interface HistoryResponse {
