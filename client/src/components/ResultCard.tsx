@@ -245,19 +245,20 @@ const ResultCard = ({ result, mode, sourceLabel }: ResultCardProps) => {
               </p>
             </div>
           </div>
-          <div className="flex w-full sm:w-auto items-center gap-2 shrink-0 mt-2 sm:mt-0 justify-end sm:justify-start">
+          <div className="flex flex-wrap w-full sm:w-auto items-center gap-2 shrink-0 mt-2 sm:mt-0 justify-end sm:justify-start">
             <Button
               variant="outline"
               size="sm"
               onClick={downloadPdfReport}
-              className="text-[11px] sm:text-xs font-mono flex-1 sm:flex-none min-w-0"
+              className="text-[11px] sm:text-xs font-mono w-full sm:w-auto min-w-0"
               type="button"
-              <p
-                className="text-xs sm:text-sm text-muted-foreground font-mono break-words whitespace-normal"
-                title={sourceLabel}
-              >
-                {sourceLabel}
-              </p>
+            >
+              <Download className="w-4 h-4 mr-1" />
+              <span className="truncate">PDF report</span>
+            </Button>
+
+            <Button
+              variant="ghost"
               size="icon"
               onClick={copyResult}
               className="text-muted-foreground hover:text-foreground shrink-0"
