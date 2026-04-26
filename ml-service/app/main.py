@@ -118,12 +118,28 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """
+    Health check endpoint
+    Used by backend and monitoring services to check if ML service is alive
+    """
     model_loaded = ml_engine.is_model_loaded()
     return {
         "status": "healthy" if model_loaded else "degraded",
         "model_loaded": model_loaded,
-        "model_version": ml_engine.get_model_version()
+        "model_version": ml_engine.get_model_version(),
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+
+@app.get("/keep-alive")
+async def keep_alive():
+    """
+    Keep-alive endpoint for preventing service sleep on free tier hosting
+    Returns minimal response for efficiency
+    """
+    return {
+        "status": "alive",
+        "timestamp": datetime.utcnow().isoformat()
     }
 
 
